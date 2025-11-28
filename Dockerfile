@@ -14,7 +14,7 @@ WORKDIR /directus
 
 # Copy your entire 'extensions' folder into the container
 # Ensure you have a local 'extensions' folder with your source code and package.json files
-COPY ./extensions /directus/extensions
+COPY --chown=node:node ./extensions /directus/extensions
 
 # Navigate into the main application directory and run build for all extensions
 # This command iterates through all subdirectories in 'extensions', installs dependencies, and runs the 'build' script
