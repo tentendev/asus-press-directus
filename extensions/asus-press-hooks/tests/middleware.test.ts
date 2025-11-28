@@ -126,7 +126,7 @@ describe("Security Middleware - CSRF Protection", () => {
         "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary",
         Origin: INVALID_ORIGIN,
       },
-      body: "------WebKitFormBoundary\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\ntest@test.com\r\n------WebKitFormBoundary--",
+      body: '------WebKitFormBoundary\r\nContent-Disposition: form-data; name="email"\r\n\r\ntest@test.com\r\n------WebKitFormBoundary--',
     });
 
     expect(response.status).toBe(403);
