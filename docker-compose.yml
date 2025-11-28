@@ -13,6 +13,8 @@ services:
 
   directus:
     image: directus/directus:11.13.4
+    labels:
+      - dev.orbstack.domains=asus-press-cms.local
     ports:
       - 8055:8055
     volumes:
@@ -22,9 +24,31 @@ services:
       - cache
       - database
     environment:
-      PUBLIC_URL: 'http://localhost:8055'
-      KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
-      SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL}
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+
+      RATE_LIMITER_ENABLED: true
+      EXTENSIONS_AUTO_RELOAD: true
+      PM2_AUTO_RESTART: true
+      HSTS_ENABLED: true
+
+      ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION: 15000
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: ${FRONTEND_URL}
+      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC: "'self'"
+      CONTENT_SECURITY_POLICY_DIRECTIVES__STYLE_SRC: "'self' 'unsafe-inline'"
+
+      CORS_ENABLED: true
+      CORS_ORIGIN: ${DIRECTUS_PUBLIC_URL}
+      ALLOWED_ORIGINS: ${DIRECTUS_PUBLIC_URL}
+
+      QUERY_LIMIT_MAX: 200
+      GRAPHQL_INTROSPECTION: true
+
+      SESSION_COOKIE_SECURE: true
+      SESSION_COOKIE_SAME_SITE: 'Strict'
+      
+      # Docker compose specific environment variables...
 
       DB_CLIENT: 'pg'
       DB_HOST: 'database'
@@ -38,31 +62,6 @@ services:
       CACHE_AUTO_PURGE: 'true'
       REDIS: 'redis://cache:6379'
 
-      ADMIN_EMAIL: 'dev@tenten.co'
-      ADMIN_PASSWORD: 'd1r3ctu5'
-
       STORAGE_LOCATIONS: 'local'
       STORAGE_LOCAL_ROOT: './uploads'
 
-      ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION: 15000
-
-      HSTS_ENABLED: true
-
-      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: "asus-press-staging.tenten.dev"
-      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC: "'self'"
-      CONTENT_SECURITY_POLICY_DIRECTIVES__STYLE_SRC: "'self' 'unsafe-inline'"
-
-      CORS_ENABLED: true
-      CORS_ORIGIN: 'http://localhost:8055'
-      ALLOWED_ORIGINS: 'http://localhost:8055'
-
-      RATE_LIMITER_ENABLED: true
-
-      QUERY_LIMIT_MAX: 200
-      GRAPHQL_INTROSPECTION: true
-      
-      EXTENSIONS_AUTO_RELOAD: true
-      PM2_AUTO_RESTART: true
-
-      SESSION_COOKIE_SECURE: true
-      SESSION_COOKIE_SAME_SITE: 'Strict'
