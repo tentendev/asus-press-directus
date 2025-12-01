@@ -8,9 +8,11 @@ export function createStatusRewriteMiddleware() {
     const originalSend = res.send.bind(res);
 
     res.send = function (body?: any) {
-      if (res.statusCode === 403) {
+      if (res.statusCode === 403 && req.method === "GET") {
         res.statusCode = 404;
+
         const error = new NotFoundError();
+
         return originalSend({
           errors: [
             {
@@ -23,6 +25,7 @@ export function createStatusRewriteMiddleware() {
           ],
         });
       }
+
       return originalSend(body);
     };
 
