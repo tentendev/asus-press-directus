@@ -1,0 +1,1182 @@
+{
+	"info": {
+		"_postman_id": "a32bdac3-3ea6-41ac-bc0c-a8d976848a98",
+		"name": "ASUS Press CMS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10089348",
+		"_collection_link": "https://grey-meteor-255705.postman.co/workspace/Team-Workspace~036e7bb7-45c4-4690-8638-0e2fbf66de92/collection/10089348-a32bdac3-3ea6-41ac-bc0c-a8d976848a98?action=share&source=collection_link&creator=10089348"
+	},
+	"item": [
+		{
+			"name": "REST APIs",
+			"item": [
+				{
+					"name": "Blog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{directus_url}}/items/blog?limit=10&lang=id,title,cover_photo.*",
+							"host": [
+								"{{directus_url}}"
+							],
+							"path": [
+								"items",
+								"blog"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "lang",
+									"value": "id,title,cover_photo.*"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Statements",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{directus_url}}/items/statements?limit=10&fields=id,title,cover_photo.*",
+							"host": [
+								"{{directus_url}}"
+							],
+							"path": [
+								"items",
+								"statements"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "fields",
+									"value": "id,title,cover_photo.*"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Press Releases",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{directus_url}}/items/press_releases?limit=10&fields=id,title,cover_photo.*",
+							"host": [
+								"{{directus_url}}"
+							],
+							"path": [
+								"items",
+								"press_releases"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "fields",
+									"value": "id,title,cover_photo.*"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{directus_url}}/files",
+							"host": [
+								"{{directus_url}}"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security Tests",
+			"item": [
+				{
+					"name": "Safe Methods",
+					"item": [
+						{
+							"name": "/server/ping (invalid origin) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('GET requests should bypass origin checks', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{directus_url}}/server/ping",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"server",
+										"ping"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/server/ping (invalid origin) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('HEAD requests should bypass origin checks', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "HEAD",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{directus_url}}/server/ping",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"server",
+										"ping"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/server/ping (invalid origin) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('OPTIONS requests should bypass origin checks', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "OPTIONS",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{directus_url}}/server/ping",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"server",
+										"ping"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Origin Validation",
+					"item": [
+						{
+							"name": "/auth/login (unauthorized origin) - should block",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should return 404 for unauthorized origin', function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											"pm.test('Should have ROUTE_NOT_FOUND error code', function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.errors).to.be.an('array');",
+											"    pm.expect(jsonData.errors[0].extensions.code).to.eql('ROUTE_NOT_FOUND');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (valid origin) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should pass origin check for valid ALLOWED_ORIGINS', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "{{valid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (no origin) - should allow server-to-server",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should pass origin check for server-to-server calls', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CSRF Protection",
+					"item": [
+						{
+							"name": "/auth/login (form-urlencoded, invalid origin) - should block",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should block form submission from unauthorized origin', function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											"pm.test('Should have ROUTE_NOT_FOUND error code', function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.errors[0].extensions.code).to.eql('ROUTE_NOT_FOUND');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "test@test.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (multipart/form-data, invalid origin) - should block",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should block multipart form submission from unauthorized origin', function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Origin",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "test@test.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Property Validation",
+					"item": [
+						{
+							"name": "/auth/login (invalid properties) - should reject",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should return 400 for invalid properties', function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test('Error message should mention invalid properties', function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.error).to.include('invalid properties');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\", \"malicious\": \"property\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (valid properties) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should pass property validation', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (with mode property) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should allow mode property', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\", \"mode\": \"cookie\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "GraphQL Property Validation",
+					"item": [
+						{
+							"name": "/graphql (with malicious property) - passes to handler",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('GraphQL handles request (not blocked by middleware)', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\", \"malicious\": \"property\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/graphql (valid properties) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should not return 400 for valid GraphQL properties', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/graphql (with variables) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should allow variables property', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\", \"variables\": {}}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/graphql (with operationName) - should allow",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should allow operationName property', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\", \"operationName\": \"GetTypename\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Endpoint Validation",
+					"item": [
+						{
+							"name": "/graphql/malicious - should reject invalid endpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should return 400 for invalid GraphQL endpoint', function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test('Error message should mention invalid endpoint', function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.error).to.include('Invalid endpoint');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql/malicious",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql",
+										"malicious"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/graphql/system - should allow valid endpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should not block /graphql/system endpoint', function () {",
+											"    pm.response.to.not.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"query\": \"{ __typename }\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/graphql/system",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"graphql",
+										"system"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Edge Cases",
+					"item": [
+						{
+							"name": "/auth/login (Referer only, invalid) - should check referer",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should check Referer when Origin is missing', function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (Origin + Referer, valid origin) - origin takes precedence",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Origin should take precedence over Referer', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "{{valid_origin}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "{{invalid_origin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"email\": \"test@test.com\", \"password\": \"test\"}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/auth/login (empty body) - should pass middleware",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should pass middleware checks with empty body', function () {",
+											"    pm.response.to.not.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{directus_url}}/auth/login",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Status Rewrite Middleware",
+					"item": [
+						{
+							"name": "/users (no auth) - should convert 403 to 404",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test('Should return 404 (converted from 403)', function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											"",
+											"pm.test('Should have proper error response format', function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.errors).to.be.an('array');",
+											"    pm.expect(jsonData.errors[0].message).to.eql('Not found.');",
+											"    pm.expect(jsonData.errors[0].extensions.code).to.eql('ROUTE_NOT_FOUND');",
+											"    pm.expect(jsonData.errors[0].extensions.path).to.eql('/users');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{directus_url}}/users",
+									"host": [
+										"{{directus_url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GraphQL API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n    blog {\n        id\n        title\n        cover_photo {\n            id\n            title\n            description\n            width\n            height\n        }\n    }\n\n    statements {\n        id\n        title\n        cover_photo {\n            id\n            title\n            description\n            width\n            height\n        }\n    }\n\n    press_releases {\n         id\n        title\n        cover_photo {\n            id\n            title\n            description\n            width\n            height\n        }\n    }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "{{directus_url}}/graphql",
+					"host": [
+						"{{directus_url}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{directus_access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "directus_url",
+			"value": "http://localhost:8055",
+			"type": "string"
+		},
+		{
+			"key": "directus_access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "valid_origin",
+			"value": "https://asus-press-cms.local",
+			"type": "string"
+		},
+		{
+			"key": "invalid_origin",
+			"value": "https://malicious-site.com",
+			"type": "string"
+		}
+	]
+}

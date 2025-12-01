@@ -6,6 +6,7 @@ import {
   createAuthLoginPropertyValidation,
 } from "./middleware/property-validation.js";
 import { createGraphQLEndpointValidation } from "./middleware/endpoint-validation.js";
+import { createStatusRewriteMiddleware } from "./middleware/status-rewrite.js";
 
 export default defineHook(({ init }) => {
   init("routes.before", ({ app }: Record<"app", Application>) => {
@@ -17,6 +18,9 @@ export default defineHook(({ init }) => {
     // Get the request URL for CSRF checks
     const REQUEST_URL = process.env.PUBLIC_URL || "http://localhost:8055";
 
+    // Status rewrite middleware (convert 409 to 404)
+    app.use(createStatusRewriteMiddleware());
+
     // Security middleware (origin validation + CSRF protection)
     app.use(createCheckOriginMiddleware(ALLOWED_ORIGINS, REQUEST_URL));
 
@@ -27,8 +31,6 @@ export default defineHook(({ init }) => {
     // Endpoint validation middleware
     app.use(createGraphQLEndpointValidation());
 
-    console.log(
-      "--- [init:routes.before] ASUS Press Custom Middleware ---"
-    );
+    console.log("--- [init:routes.before] ASUS Press Custom Middleware ---");
   });
 });

@@ -1,0 +1,40 @@
+{
+  "name": "asus-press-hooks",
+  "description": "Please enter a description for your extension",
+  "icon": "extension",
+  "version": "1.0.0",
+  "keywords": [
+    "directus",
+    "directus-extension",
+    "directus-extension-hook"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "directus:extension": {
+    "type": "hook",
+    "path": "dist/index.js",
+    "source": "src/index.ts",
+    "host": "^10.10.0"
+  },
+  "scripts": {
+    "build": "directus-extension build",
+    "dev": "directus-extension build -w --no-minify",
+    "link": "directus-extension link"
+  },
+  "devDependencies": {
+    "@directus/extensions-sdk": "11.0.1",
+    "@types/express": "^5.0.3",
+    "@types/node": "^20.12.2",
+    "@types/supertest": "^6.0.3",
+    "@vitest/ui": "^3.2.4",
+    "express": "^5.1.0",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@directus/errors": "^2.0.5",
+    "body-parser": "^1.20.2",
+    "escape-string-regexp": "^5.0.0"
+  }
+}
